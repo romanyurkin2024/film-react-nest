@@ -1,4 +1,6 @@
-[{
+use('films');
+
+db.movies.insertMany([{
     "id": "0e33c7f6-27a7-4aa0-8e61-65d7e5effecf",
     "rating": 2.9,
     "director": "Итан Райт",
@@ -496,4 +498,4 @@
         "price": 350,
         "taken": []
     }]
-}]
+}])
