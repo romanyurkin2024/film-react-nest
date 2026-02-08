@@ -97,6 +97,14 @@ export class FilmsTypeOrmRepository implements IFilmsRepository {
   }
 
   private toScheduleDto(s: ScheduleEntity): ScheduleDto {
+    const taken =
+    typeof s.taken === 'string'
+      ? s.taken
+          .split(',')
+          .map((x) => x.trim())
+          .filter(Boolean)
+      : [];
+      
     return {
       id: s.id,
       daytime: s.daytime,
@@ -104,7 +112,7 @@ export class FilmsTypeOrmRepository implements IFilmsRepository {
       rows: s.rows,
       seats: s.seats,
       price: s.price,
-      taken: s.taken.split(','),
+      taken
     };
   }
 }
