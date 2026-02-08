@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { FilmsRepository } from 'src/repository/films.repository';
+import { Inject, Injectable } from '@nestjs/common';
+import { IFilmsRepository } from './repository/films.typeorm.repository';
 
 @Injectable()
 export class FilmsService {
-  constructor(private readonly filmsRepository: FilmsRepository) {}
+  constructor(
+    @Inject('FILMS_REPOSITORY')
+    private readonly filmsRepository: IFilmsRepository,
+  ) {}
 
   async findAll() {
     const films = await this.filmsRepository.findAll();
