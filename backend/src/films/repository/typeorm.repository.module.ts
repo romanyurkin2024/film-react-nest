@@ -12,7 +12,7 @@ import { ScheduleEntity } from '../schemas/Schedule.entity';
         type: config.get<'postgres'>('DATABASE_DRIVER'),
         host: 'localhost',
         port: 5432,
-        database: 'prac',
+        database: 'films',
         username: config.get('DATABASE_USERNAME'),
         password: config.get('DATABASE_PASSWORD'),
         entities: [FilmEntity, ScheduleEntity],
