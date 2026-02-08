@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { FilmEntity } from './schemas/film.entity';
+import { FilmEntity } from './schemas/Film.entity';
 import { ScheduleEntity } from './schemas/Schedule.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FilmsController } from './films.controller';

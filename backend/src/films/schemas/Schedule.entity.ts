@@ -5,7 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { FilmEntity } from './film.entity';
+import { FilmEntity } from './Film.entity';
 
 @Entity('schedules')
 export class ScheduleEntity {
