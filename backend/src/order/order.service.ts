@@ -1,10 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { FilmsRepository } from 'src/repository/films.repository';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { IFilmsRepository } from '../films/repository/films.typeorm.repository';
 import { CreateOrderDto } from './dto/order.dto';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly filmRepository: FilmsRepository) {}
+  constructor(
+    @Inject('FILMS_REPOSITORY')
+    private readonly filmRepository: IFilmsRepository,
+  ) {}
 
   async createOrder(order: CreateOrderDto) {
     for (const ticket of order.tickets) {
@@ -15,7 +18,6 @@ export class OrderService {
       }
 
       const session = film.find((s) => s.id === ticket.session);
-
       if (!session) {
         throw new BadRequestException('Сеанс не найден');
       }
