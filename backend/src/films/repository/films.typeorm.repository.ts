@@ -82,11 +82,19 @@ export class FilmsTypeOrmRepository implements IFilmsRepository {
   }
 
   private toFilmDto(film: FilmEntity): FilmDto {
-    return {
+    const tags =
+    typeof film.tags === 'string'
+      ? film.tags
+          .split(',')
+          .map((t) => t.trim())
+          .filter(Boolean)
+      : [];
+      
+      return {
       id: film.id,
       rating: film.rating,
       director: film.director,
-      tags: film.tags,
+      tags,
       image: film.image,
       cover: film.cover,
       title: film.title,
