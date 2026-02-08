@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 
-import { configProvider } from './app.config.provider';
 import { OrderController } from './order/order.controller';
 import { OrderService } from './order/order.service';
 import { join } from 'path';
@@ -23,6 +22,6 @@ import { FilmsModule } from './films/films.module';
     FilmsModule,
   ],
   controllers: [OrderController],
-  providers: [configProvider, OrderService],
+  providers: [OrderService],
 })
 export class AppModule {}

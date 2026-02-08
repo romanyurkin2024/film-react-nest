@@ -83,14 +83,14 @@ export class FilmsTypeOrmRepository implements IFilmsRepository {
 
   private toFilmDto(film: FilmEntity): FilmDto {
     const tags =
-    typeof film.tags === 'string'
-      ? film.tags
-          .split(',')
-          .map((t) => t.trim())
-          .filter(Boolean)
-      : [];
-      
-      return {
+      typeof film.tags === 'string'
+        ? film.tags
+            .split(',')
+            .map((t) => t.trim())
+            .filter(Boolean)
+        : [];
+
+    return {
       id: film.id,
       rating: film.rating,
       director: film.director,
@@ -106,13 +106,13 @@ export class FilmsTypeOrmRepository implements IFilmsRepository {
 
   private toScheduleDto(s: ScheduleEntity): ScheduleDto {
     const taken =
-    typeof s.taken === 'string'
-      ? s.taken
-          .split(',')
-          .map((x) => x.trim())
-          .filter(Boolean)
-      : [];
-      
+      typeof s.taken === 'string'
+        ? s.taken
+            .split(',')
+            .map((x) => x.trim())
+            .filter(Boolean)
+        : [];
+
     return {
       id: s.id,
       daytime: s.daytime,
@@ -120,7 +120,7 @@ export class FilmsTypeOrmRepository implements IFilmsRepository {
       rows: s.rows,
       seats: s.seats,
       price: s.price,
-      taken
+      taken,
     };
   }
 }
