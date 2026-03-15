@@ -6,20 +6,19 @@ import { TskvLogger } from './logger/TSKVLogger';
 import { JsonLogger } from './logger/JsonLogger';
 import { DevLogger } from './logger/DevLogger';
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
   const loggerType = process.env.LOGGER_TYPE || 'dev';
-  switch(loggerType){
-    case 'json':  
+  switch (loggerType) {
+    case 'json':
       app.useLogger(new JsonLogger());
       break;
-    case 'tskv':  
+    case 'tskv':
       app.useLogger(new TskvLogger());
       break;
-    default:  
+    default:
       app.useLogger(new DevLogger());
   }
 

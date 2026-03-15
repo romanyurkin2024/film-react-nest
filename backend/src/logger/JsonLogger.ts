@@ -3,7 +3,7 @@ import { Injectable, LoggerService } from '@nestjs/common';
 @Injectable()
 export class JsonLogger implements LoggerService {
   private format(level: string, message: any, ...optional: any[]) {
-    const processedOptional = optional.map(arg => {
+    const processedOptional = optional.map((arg) => {
       if (arg instanceof Error) {
         return {
           name: arg.name,
@@ -14,10 +14,10 @@ export class JsonLogger implements LoggerService {
       return arg;
     });
 
-    const logObject: any = { 
-      level, 
+    const logObject: any = {
+      level,
       message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     if (processedOptional.length > 0) {

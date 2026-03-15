@@ -25,8 +25,10 @@ describe('OrderService', () => {
   });
 
   it('Должен успешно создать заказ, если места свободны', async () => {
-    const orderDto = { tickets: [{ film: 'f1', session: 's1', row: 1, seat: 5 }] };
-    
+    const orderDto = {
+      tickets: [{ film: 'f1', session: 's1', row: 1, seat: 5 }],
+    };
+
     repository.findScheduleById.mockResolvedValue([{ id: 's1', taken: [] }]);
 
     const result = await service.createOrder(orderDto as any);
@@ -36,10 +38,14 @@ describe('OrderService', () => {
   });
 
   it('Должен выбросить ошибку, если место уже занято', async () => {
-    const orderDto = { tickets: [{ film: 'f1', session: 's1', row: 1, seat: 5 }] };
-    
+    const orderDto = {
+      tickets: [{ film: 'f1', session: 's1', row: 1, seat: 5 }],
+    };
+
     // Место 1:5 уже в списке занятых
-    repository.findScheduleById.mockResolvedValue([{ id: 's1', taken: ['1:5'] }]);
+    repository.findScheduleById.mockResolvedValue([
+      { id: 's1', taken: ['1:5'] },
+    ]);
 
     await expect(service.createOrder(orderDto as any)).rejects.toThrow(
       new BadRequestException('Место 1:5 уже занято'),
@@ -49,10 +55,12 @@ describe('OrderService', () => {
   it('Должен выбросить ошибку, если фильм не найден', async () => {
     repository.findScheduleById.mockResolvedValue(null);
 
-    const orderDto = { tickets: [{ film: 'non-existent', session: 's1', row: 1, seat: 1 }] };
+    const orderDto = {
+      tickets: [{ film: 'non-existent', session: 's1', row: 1, seat: 1 }],
+    };
 
     await expect(service.createOrder(orderDto as any)).rejects.toThrow(
       new BadRequestException('Фильм не найден'),
     );
   });
-})
+});

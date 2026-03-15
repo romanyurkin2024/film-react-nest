@@ -1,16 +1,27 @@
-import { describe, beforeEach, expect, jest, afterEach, it } from '@jest/globals';
+import {
+  describe,
+  beforeEach,
+  expect,
+  jest,
+  afterEach,
+  it,
+} from '@jest/globals';
 import { TskvLogger } from './TSKVLogger';
 
 describe('TskvLogger', () => {
   let logger: TskvLogger;
-  let stdoutSpy: ReturnType<typeof jest.spyOn>;;
-  let stderrSpy: ReturnType<typeof jest.spyOn>;;
+  let stdoutSpy: ReturnType<typeof jest.spyOn>;
+  let stderrSpy: ReturnType<typeof jest.spyOn>;
 
   beforeEach(() => {
     logger = new TskvLogger();
-    stdoutSpy = jest.spyOn(process.stdout, 'write').mockImplementation(() => true);
-    stderrSpy = jest.spyOn(process.stderr, 'write').mockImplementation(() => true);
-    
+    stdoutSpy = jest
+      .spyOn(process.stdout, 'write')
+      .mockImplementation(() => true);
+    stderrSpy = jest
+      .spyOn(process.stderr, 'write')
+      .mockImplementation(() => true);
+
     jest.useFakeTimers(); // Замокали дату sysdate
     jest.setSystemTime(new Date('2026-03-15T20:41:00.000Z'));
   });
@@ -26,7 +37,7 @@ describe('TskvLogger', () => {
       logger.log('Test message');
 
       expect(stdoutSpy).toHaveBeenCalledWith(
-        'tskv\ttimestamp=2026-03-15T20:41:00.000Z\tlevel=log\tmessage=Test message\n'
+        'tskv\ttimestamp=2026-03-15T20:41:00.000Z\tlevel=log\tmessage=Test message\n',
       );
     });
 
@@ -34,7 +45,7 @@ describe('TskvLogger', () => {
       logger.error('Error occurred');
 
       expect(stderrSpy).toHaveBeenCalledWith(
-        'tskv\ttimestamp=2026-03-15T20:41:00.000Z\tlevel=error\tmessage=Error occurred\n'
+        'tskv\ttimestamp=2026-03-15T20:41:00.000Z\tlevel=error\tmessage=Error occurred\n',
       );
     });
 
@@ -42,7 +53,7 @@ describe('TskvLogger', () => {
       logger.warn('Warning message');
 
       expect(stderrSpy).toHaveBeenCalledWith(
-        expect.stringContaining('level=warn\tmessage=Warning message')
+        expect.stringContaining('level=warn\tmessage=Warning message'),
       );
     });
 
@@ -50,7 +61,7 @@ describe('TskvLogger', () => {
       logger.debug('Debug info');
 
       expect(stderrSpy).toHaveBeenCalledWith(
-        expect.stringContaining('level=debug\tmessage=Debug info')
+        expect.stringContaining('level=debug\tmessage=Debug info'),
       );
     });
 
@@ -58,7 +69,7 @@ describe('TskvLogger', () => {
       logger.verbose('Verbose details');
 
       expect(stderrSpy).toHaveBeenCalledWith(
-        expect.stringContaining('level=verbose\tmessage=Verbose details')
+        expect.stringContaining('level=verbose\tmessage=Verbose details'),
       );
     });
   });
@@ -68,7 +79,7 @@ describe('TskvLogger', () => {
       logger.log('Message\twith\ttabs');
 
       expect(stdoutSpy).toHaveBeenCalledWith(
-        expect.stringContaining('message=Message\\twith\\ttabs')
+        expect.stringContaining('message=Message\\twith\\ttabs'),
       );
     });
 
@@ -76,7 +87,7 @@ describe('TskvLogger', () => {
       logger.log('Line\nbreak');
 
       expect(stdoutSpy).toHaveBeenCalledWith(
-        expect.stringContaining('message=Line\\nbreak')
+        expect.stringContaining('message=Line\\nbreak'),
       );
     });
 
@@ -84,7 +95,7 @@ describe('TskvLogger', () => {
       logger.log('key=value');
 
       expect(stdoutSpy).toHaveBeenCalledWith(
-        expect.stringContaining('message=key\\=value')
+        expect.stringContaining('message=key\\=value'),
       );
     });
 
@@ -92,7 +103,7 @@ describe('TskvLogger', () => {
       logger.log('path\\to\\file');
 
       expect(stdoutSpy).toHaveBeenCalledWith(
-        expect.stringContaining('message=path\\\\to\\\\file')
+        expect.stringContaining('message=path\\\\to\\\\file'),
       );
     });
   });

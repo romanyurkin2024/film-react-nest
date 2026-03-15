@@ -34,7 +34,10 @@ describe('FilmsService', () => {
 
   describe('findAll', () => {
     it('Должен вернуть список фильмов с их количеством', async () => {
-      const mockFilms = [{ id: '1', title: 'Avatar 3' }, { id: '2', title: 'Avatar' }];
+      const mockFilms = [
+        { id: '1', title: 'Avatar 3' },
+        { id: '2', title: 'Avatar' },
+      ];
       repository.findAll.mockResolvedValue(mockFilms);
 
       const result = await service.findAll();

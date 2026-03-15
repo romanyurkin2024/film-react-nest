@@ -2,19 +2,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FilmsController } from './films.controller';
 import { FilmsService } from './films.service';
-import { describe, beforeEach, expect, jest, afterEach, it } from '@jest/globals';
+import { describe, beforeEach, expect, jest, it } from '@jest/globals';
 
 describe('FilmsController', () => {
   let controller: FilmsController;
   let service: FilmsService;
 
   const mockFilmsService = {
-    findAll: jest.fn(() => Promise.resolve({
+    findAll: jest.fn(() =>
+      Promise.resolve({
         total: 1,
-        items: [{ id: '1', title: 'Inception' }]
-      })
+        items: [{ id: '1', title: 'Inception' }],
+      }),
     ),
-    findScheduleById: jest.fn((id: string) => 
+    findScheduleById: jest.fn((id: string) =>
       Promise.resolve({
         total: 1,
         items: [{ id: 's1', time: '10:00', filmId: id }],
@@ -60,7 +61,7 @@ describe('FilmsController', () => {
       const result = await controller.findSchedule(filmId);
 
       expect(result.items[0].id).toBe(filmId);
-      expect(service.findScheduleById).toHaveBeenCalledWith(filmId)
+      expect(service.findScheduleById).toHaveBeenCalledWith(filmId);
     });
   });
 });

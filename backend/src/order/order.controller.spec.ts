@@ -9,11 +9,11 @@ describe('OrderController', () => {
   let service: OrderService;
 
   const mockOrderService = {
-    createOrder: jest.fn((dto: CreateOrderDto) => 
-      Promise.resolve({ 
-        total: dto.tickets.length, 
-        items: dto.tickets 
-      })
+    createOrder: jest.fn((dto: CreateOrderDto) =>
+      Promise.resolve({
+        total: dto.tickets.length,
+        items: dto.tickets,
+      }),
     ),
   };
 
@@ -34,4 +34,4 @@ describe('OrderController', () => {
     expect(service.createOrder).toHaveBeenCalledWith(dto);
     expect(result.total).toBe(1);
   });
-})
+});
