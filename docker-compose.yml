@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   backend:
-    image: romanyurkin/film-backend:latest
+    image: ghcr.io/romanyurkin2024/film-backend:latest
+    platform: linux/amd64
     environment:
       - DATABASE_HOST=postgres
       - DATABASE_DRIVER=postgres
@@ -19,13 +20,15 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: romanyurkin/film-frontend:latest
+    image: ghcr.io/romanyurkin2024/film-frontend:latest
+    platform: linux/amd64
     volumes:
       - frontend_static:/var/www/html
     restart: unless-stopped
 
   nginx:
-    image: romanyurkin/film-nginx:latest
+    image: ghcr.io/romanyurkin2024/film-nginx:latest
+    platform: linux/amd64
     ports:
       - "80:80"
     volumes:
