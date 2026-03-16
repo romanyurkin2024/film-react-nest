@@ -31,8 +31,10 @@ services:
     platform: linux/amd64
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - frontend_static:/usr/share/nginx/html:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - frontend
       - backend
