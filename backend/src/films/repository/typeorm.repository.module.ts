@@ -10,7 +10,7 @@ import { ScheduleEntity } from '../schemas/Schedule.entity';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: config.get<'postgres'>('DATABASE_DRIVER'),
-        host: 'localhost',
+        host: config.get('DATABASE_HOST') ?? 'localhost',
         port: 5432,
         database: 'films',
         username: config.get('DATABASE_USERNAME'),
