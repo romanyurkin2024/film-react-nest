@@ -2,9 +2,9 @@ name: Build & Push to GHCR
 
 on:
   push:
-    branches: [ review-2 ]
+    branches: [ review-2, main ]
   pull_request:
-    branches: [ review-2 ]
+    branches: [ review-2, main ]
 
 permissions:
   contents: read
@@ -36,7 +36,7 @@ jobs:
         context: ./backend
         platforms: linux/amd64
         push: true
-        tags: ghcr.io/romanyurkin/film-backend:latest
+        tags: ghcr.io/romanyurkin2024/film-backend:latest
 
     - name: Build & Push Frontend
       uses: docker/build-push-action@v6
@@ -44,7 +44,7 @@ jobs:
         context: ./frontend
         platforms: linux/amd64
         push: true
-        tags: ghcr.io/romanyurkin/film-frontend:latest
+        tags: ghcr.io/romanyurkin2024/film-frontend:latest
 
     - name: Build & Push Nginx
       uses: docker/build-push-action@v6
@@ -52,4 +52,4 @@ jobs:
         context: ./nginx
         platforms: linux/amd64
         push: true
-        tags: ghcr.io/romanyurkin/film-nginx:latest
+        tags: ghcr.io/romanyurkin2024/film-nginx:latest
