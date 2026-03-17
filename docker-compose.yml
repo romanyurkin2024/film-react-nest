@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  backend:
+    image: ghcr.io/romanyurkin2024/film-backend:latest
+    platform: linux/amd64
+    env_file: .env
+    ports:
+      - "${BACKEND_PORT}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - film-network
+
+  frontend:
+    image: ghcr.io/romanyurkin2024/film-frontend:latest
+    platform: linux/amd64
+    volumes:
+      - frontend_static:/var/www/html
+    restart: unless-stopped
+    networks:
+      - film-network
+
+  nginx:
+    image: ghcr.io/romanyurkin2024/film-nginx:latest
+    platform: linux/amd64
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - frontend_static:/usr/share/nginx/html:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
+    networks:
+      - film-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: film-postgres-image
+    env_file: .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - film-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: film-pgadmin-image
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    networks:
+      - film-network
+
+volumes:
+  frontend_static:
+    driver: local
+  postgres_data:
+    driver: local
+  pgadmin_data: 
+    driver: local
+
+networks:
+  film-network:
+    driver: bridge

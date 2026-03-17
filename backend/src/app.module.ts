@@ -7,6 +7,7 @@ import { OrderService } from './order/order.service';
 import { join } from 'path';
 import { TypeOrmRepositoryModule } from './films/repository/typeorm.repository.module';
 import { FilmsModule } from './films/films.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { FilmsModule } from './films/films.module';
     }),
     TypeOrmRepositoryModule,
     FilmsModule,
+    LoggerModule
   ],
   controllers: [OrderController],
   providers: [OrderService],
