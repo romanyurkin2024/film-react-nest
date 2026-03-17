@@ -22,7 +22,7 @@ describe('TskvLogger', () => {
       .spyOn(process.stderr, 'write')
       .mockImplementation(() => true);
 
-    jest.useFakeTimers(); // Замокали дату sysdate
+    jest.useFakeTimers();
     jest.setSystemTime(new Date('2026-03-15T20:41:00.000Z'));
   });
 

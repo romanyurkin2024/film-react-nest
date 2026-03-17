@@ -7,6 +7,7 @@ import { describe, beforeEach, expect, jest, it } from '@jest/globals';
 describe('FilmsController', () => {
   let controller: FilmsController;
   let service: FilmsService;
+  let loggerMock: any;
 
   const mockFilmsService = {
     findAll: jest.fn(() =>
@@ -24,12 +25,17 @@ describe('FilmsController', () => {
   };
 
   beforeEach(async () => {
+    loggerMock = { log: jest.fn() };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [FilmsController],
       providers: [
         {
           provide: FilmsService,
           useValue: mockFilmsService,
+        },
+        {
+          provide: 'APP_LOGGER',
+          useValue: loggerMock,
         },
       ],
     }).compile();
@@ -52,6 +58,9 @@ describe('FilmsController', () => {
       });
 
       expect(service.findAll).toHaveBeenCalled();
+      expect(loggerMock.log).toHaveBeenCalledWith(
+        expect.stringContaining('GET /films - запрос списка всех фильмов')
+      );
     });
   });
 
@@ -62,6 +71,11 @@ describe('FilmsController', () => {
 
       expect(result.items[0].id).toBe(filmId);
       expect(service.findScheduleById).toHaveBeenCalledWith(filmId);
+
+      expect(loggerMock.log).toHaveBeenCalledWith(
+        expect.stringContaining(`GET /films/${filmId}/schedule`),
+        expect.objectContaining({ filmId })
+      );
     });
   });
 });

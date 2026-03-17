@@ -5,21 +5,29 @@ import { describe, beforeEach, it, expect, jest } from '@jest/globals';
 describe('FilmsService', () => {
   let service: FilmsService;
   let repository: any;
+  let mockLogger: any;
 
-  // 1. Создаем мок репозитория
+  
   const mockFilmsRepository = {
     findAll: jest.fn(),
     findScheduleById: jest.fn(),
   };
 
   beforeEach(async () => {
+    mockLogger = {
+      log: jest.fn()
+    }
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         FilmsService,
         {
-          // Используем строковый токен, как в @Inject('FILMS_REPOSITORY')
           provide: 'FILMS_REPOSITORY',
           useValue: mockFilmsRepository,
+        },
+        {
+          provide: 'APP_LOGGER',
+          useValue: mockLogger,
         },
       ],
     }).compile();

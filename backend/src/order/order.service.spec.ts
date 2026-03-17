@@ -6,6 +6,7 @@ import { describe, beforeEach, it, expect, jest } from '@jest/globals';
 describe('OrderService', () => {
   let service: OrderService;
   let repository: any;
+  let loggerMock: any; 
 
   const mockRepository = {
     findScheduleById: jest.fn(),
@@ -13,10 +14,20 @@ describe('OrderService', () => {
   };
 
   beforeEach(async () => {
+
+    loggerMock = {
+      log: jest.fn(),
+      error: jest.fn(),
+      warn: jest.fn(),
+      debug: jest.fn(),
+      verbose: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         OrderService,
         { provide: 'FILMS_REPOSITORY', useValue: mockRepository },
+        { provide: 'APP_LOGGER', useValue: loggerMock },
       ],
     }).compile();
 
@@ -35,6 +46,10 @@ describe('OrderService', () => {
 
     expect(result.total).toBe(1);
     expect(repository.updateTakenSeats).toHaveBeenCalledWith('f1', 's1', '1:5');
+    expect(loggerMock.log).toHaveBeenCalledWith(
+      expect.stringContaining('Начало создания заказа'), 
+      expect.any(Object)
+    );
   });
 
   it('Должен выбросить ошибку, если место уже занято', async () => {
@@ -42,13 +57,17 @@ describe('OrderService', () => {
       tickets: [{ film: 'f1', session: 's1', row: 1, seat: 5 }],
     };
 
-    // Место 1:5 уже в списке занятых
     repository.findScheduleById.mockResolvedValue([
       { id: 's1', taken: ['1:5'] },
     ]);
 
     await expect(service.createOrder(orderDto as any)).rejects.toThrow(
       new BadRequestException('Место 1:5 уже занято'),
+    );
+    
+    expect(loggerMock.error).toHaveBeenCalledWith(
+      expect.stringContaining('Место 1:5 уже занято'),
+      expect.any(Object)
     );
   });
 
@@ -61,6 +80,11 @@ describe('OrderService', () => {
 
     await expect(service.createOrder(orderDto as any)).rejects.toThrow(
       new BadRequestException('Фильм не найден'),
+    );
+
+    expect(loggerMock.error).toHaveBeenCalledWith(
+      expect.stringContaining('Фильм не найден'),
+      expect.any(Object)
     );
   });
 });
